@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
     align-items: center;
 `
 
-export const Container = styled.div`
+export const Card = styled.div`
     height: 574px;
     width: 734px;
     background-color: #FFFF;   
