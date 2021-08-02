@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import Checkbox from '../../Checkbox/Checkbox'
 import AppContainer from '../AppContainer/AppContainer'
 import AppHeader from '../AppHeader/AppHeader'
-import LineChart from '../LineChart/LineChart'
+import LineChart from '../../shared/LineChart/LineChart'
 import { Wrapper, Card } from './App.styles'
+import ShoppingList from '../ShoppingList/ShoppingList'
+import productsMock from '../../mocks/productsList.json'
 
-function App(){
-    const [batata, setBatata] = useState()
-    const [arroz, setArroz] = useState()
+function App(){   
+    const colors = ['#62CBC6', '#00ABAD', '#00858C', '#006073', '#004D61']
+
+    const [products, setProducts] = useState(productsMock.products)
+    const [productsSelected, setProductsSelected] = useState([])
+    useEffect(() => {
+        const newProductsSelected = products.filter(product => product.checked)
+        setProductsSelected(newProductsSelected) }, [products])
 
     const [saudavel, setSaldavel] = useState(10)
     const [naoTaSsaudavel, setNaoTaoSaldavel] = useState(5)
@@ -15,18 +21,23 @@ function App(){
     const [outros, setOutros] = useState(45)
     useEffect( () => {setTimeout(() => {setSaldavel(60); setNaoTaoSaldavel(48); setLimpeza(85); setOutros(80)}, 3000)},[])
 
-    const colors = ['#62CBC6', '#00ABAD', '#00858C', '#006073', '#004D61']
+
+    //funcao responsavel por alterar status do checkbox
+    function handleToggle(id){
+        const newProducts = products.map( product => 
+            product.id == id ? {...product, checked: !product.checked} : product
+        )
+
+        setProducts(newProducts)
+    }
 
     return <Wrapper>           
         <Card>
             <AppHeader />
             <AppContainer
-                colLeft={<div>Produtos Disponíveis
-                    <Checkbox title='Batata' value={batata} onClick={() => setBatata(!batata)}/>   
-                    <Checkbox title='Arroz' value={arroz} onClick={() => setArroz(!arroz)}/>                  
-                </div>}
+                colLeft={<ShoppingList title={'Produtos Disponíveis'} products={products} onToggle={handleToggle}/>}
 
-                colMiddle={<div>Seu Carrinho</div>}
+                colMiddle={<ShoppingList title={'Seu Carrinho'} products={productsSelected} onToggle={handleToggle}/>}
 
                 colRight={<div>Estatisticas
                     <LineChart title={'saudavel'} percentage={saudavel} color={colors[0]}/> 
