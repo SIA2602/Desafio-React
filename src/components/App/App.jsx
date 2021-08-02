@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AppContainer from '../AppContainer/AppContainer'
 import AppHeader from '../AppHeader/AppHeader'
 import LineChart from '../../shared/LineChart/LineChart'
-import { Wrapper, Card } from './App.styles'
+import { Wrapper, Card, Title } from './App.styles'
 import ShoppingList from '../ShoppingList/ShoppingList'
 import productsMock from '../../mocks/productsList.json'
 import extractPercentage from '../../utils/extractPercentage'
@@ -12,9 +12,15 @@ function App(){
 
     const [products, setProducts] = useState(productsMock.products)
     const [productsSelected, setProductsSelected] = useState([])
+    const [total, setTotal] = useState(0)
+
     useEffect(() => {
         const newProductsSelected = products.filter(product => product.checked)
         setProductsSelected(newProductsSelected) }, [products])
+
+    useEffect(() => {
+        const newTotal = productsSelected.map(value => value.price).reduce( (a,b) => a + b, 0).toFixed(2)
+        setTotal(newTotal)}, [productsSelected])
 
     //funcao responsavel por alterar status do checkbox
     function handleToggle(id){
@@ -33,7 +39,7 @@ function App(){
 
                 colMiddle={<ShoppingList title={'Seu Carrinho'} products={productsSelected} onToggle={handleToggle}/>}
 
-                colRight={<div>Estatisticas
+                colRight={<Title>estatisticas
                     <LineChart 
                         title={'saudavel'}
                         percentage={extractPercentage(
@@ -76,8 +82,13 @@ function App(){
                             ).length
                         )}
                         color={colors[3]}
-                    />                                   
-                </div>}                
+                    /> 
+
+                    <div style={{color: '#004D61', fontSize: '18px', marginTop: '18px'}}>
+                        {"R$ "+total}    
+                    </div>    
+                                                   
+                </Title>}                
             />           
         </Card>        
     </Wrapper>

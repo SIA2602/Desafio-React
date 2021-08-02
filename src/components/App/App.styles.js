@@ -20,3 +20,10 @@ export const Card = styled.div`
     border-radius: 20px; 
     box-shadow: 0 3px 10px rgba(0,0,0,.15);    
 `
+
+export const Title = styled.h2`
+    color: #004D61;
+    font-size: 18px;
+    font-weight: 400;    
+    height: 32px;    
+`
